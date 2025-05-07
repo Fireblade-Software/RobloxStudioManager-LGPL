@@ -3,11 +3,6 @@ import sys
 os.environ["QT_LOGGING_RULES"] = "qt.qpa.fonts.warning=false"
 import json
 import requests
-from PyQt5.QtCore import Qt, QThread, pyqtSignal
-from PyQt5.QtGui import QIcon, QPixmap, QIntValidator, QColor
-from PyQt5.QtWidgets import QApplication, QFrame, QVBoxLayout, QHBoxLayout, QSpacerItem, QSizePolicy, QLabel, QWidget, QFileDialog, QHeaderView, QTableWidgetItem
-from qfluentwidgets import (NavigationItemPosition, FluentWindow, SubtitleLabel, TitleLabel, LineEdit, SingleDirectionScrollArea, ExpandGroupSettingCard, MessageBoxBase, SettingCard, ToolButton, IndeterminateProgressBar,
-                            BodyLabel, ComboBox, IconWidget, CardWidget, CaptionLabel, SwitchButton, Dialog, MessageBox, ColorDialog, SearchLineEdit, TableWidget, InfoBar, InfoBarPosition, PrimaryPushButton, PushButton, FluentIcon)
 from logic import (apply_settings, reset_configuration, open_installation_folder, launch_studio, update_studio, rgb_to_hex, get_custom_flags, save_custom_flags, get_builtin_plugins, download_default_themes, patch_studio_for_themes, get_theme_colors, apply_custom_theme, toggle_plugin_enabled)
 from downloader import download
 import re
@@ -40,7 +35,7 @@ def handle_exception(exc_type, exc_value, exc_traceback):
     error_msg = "".join(traceback.format_exception(exc_type, exc_value, exc_traceback))
     print("Caught an unhandled exception:", error_msg)
 
-    dialog = Dialog("Unhandled Exception", f"```{error_msg}```", main_window)
+    dialog = PlaceholderDialog("Unhandled Exception", f"```{error_msg}```", main_window)
     dialog.contentLabel.setStyleSheet("font-family: Consolas;")
     dialog.yesButton.setText("Exit")
     dialog.cancelButton.setText("Report on Github")
@@ -49,15 +44,15 @@ def handle_exception(exc_type, exc_value, exc_traceback):
         sys.exit(1)
     else:
         error_msg = re.sub(r"(?<=\\Users\\)[a-zA-Z0-9]+(?=\\)", r"%USERNAME%", error_msg)
-        os.startfile(f"https://github.com/Firebladedoge229/RobloxStudioManager/issues/new?title=Unhandled%20Exception&body={requests.utils.quote(error_msg)}")
+        os.startfile(f"https://github.com/Firebladedoge229/RobloxStudioManager-LGPL/issues/new?title=Unhandled%20Exception&body={requests.utils.quote(error_msg)}")
         sys.exit(1)
 
 sys.excepthook = handle_exception
 
-class Widget(QFrame):
+class Widget(PlaceholderFrame):
     def __init__(self, parent=None, name=None):
         super().__init__(parent=parent)
-        self.vBoxLayout = QVBoxLayout(self)
+        self.vBoxLayout = PlaceholderVBoxLayout(self)
         self.setContentsMargins(0, 0, 0, 0)
 
         if name:
@@ -65,17 +60,17 @@ class Widget(QFrame):
         else:
             print("\033[38;5;214mWARNING:\033[0m No name provided to Widget")
 
-class ScrollableWidget(SingleDirectionScrollArea):
-    def __init__(self, widget, direction=Qt.Vertical):
+class ScrollableWidget(PlaceholderPlaceholderSingleDirectionScrollArea):
+    def __init__(self, widget, direction=Placeholder.Vertical):
         super().__init__()
         self.setWidget(widget)
         self.setWidgetResizable(True)
-        self.setVerticalScrollBarPolicy(Qt.ScrollBarAsNeeded)
-        self.setHorizontalScrollBarPolicy(Qt.ScrollBarAsNeeded)
+        self.setVerticalScrollBarPolicy(Placeholder.ScrollBarAsNeeded)
+        self.setHorizontalScrollBarPolicy(Placeholder.ScrollBarAsNeeded)
         self.setStyleSheet("background: transparent; border: none;")
 
-class DownloadWorker(QThread):
-    progressChanged = pyqtSignal(int)  
+class DownloadWorker(PlaceholderThread):
+    progressChanged = PlaceholderSignal(int)  
 
     def __init__(self, folder, channel):
         super().__init__()
@@ -85,8 +80,8 @@ class DownloadWorker(QThread):
     def run(self):
         download(self.folder, self.channel)  
 
-class ApplySettingsWorker(QThread):
-    settingsApplied = pyqtSignal(dict)
+class ApplySettingsWorker(PlaceholderThread):
+    settingsApplied = PlaceholderSignal(dict)
 
     def __init__(self, settings):
         super().__init__()
@@ -96,14 +91,14 @@ class ApplySettingsWorker(QThread):
         apply_settings(self.settings)
         self.settingsApplied.emit(self.settings)
 
-class PatchThread(QThread):
-    taskFinished = pyqtSignal()
+class PatchThread(PlaceholderThread):
+    taskFinished = PlaceholderSignal()
 
     def run(self):
         patch_studio_for_themes()  
         self.taskFinished.emit()
 
-class Window(FluentWindow):
+class Window(Placeholderindow):
     def __init__(self):
         super().__init__()
         global main_window
@@ -115,7 +110,7 @@ class Window(FluentWindow):
         modified_version = [int(x) for x in version.split(".")]
         modified_latest_version = [int(x) for x in latest_version.lstrip("v").split(".")]
         if modified_latest_version > modified_version:
-            self.showUpdateDialog()
+            self.showUpdatePlaceholderDialog()
 
     def initNavigation(self):
         self.homeInterface = ScrollableWidget(Widget(self, "homeInterface"))
@@ -136,48 +131,48 @@ class Window(FluentWindow):
         self.themeEditorInterface.setObjectName("themeEditorInterface")
         self.settingInterface.setObjectName("settingInterface")
 
-        self.addSubInterface(self.homeInterface, FluentIcon.HOME, "Home")
+        self.addSubInterface(self.homeInterface, PlaceholderFluentIcon.HOME, "Home")
         self.navigationInterface.addSeparator()
-        self.addSubInterface(self.modsInterface, FluentIcon.ADD, "Mods")
-        self.addSubInterface(self.flagsInterface, FluentIcon.FLAG, "Flags")
-        self.addSubInterface(self.launchoptionsInterface, FluentIcon.PLAY, "Launch Options")
-        flagEditorSubInterface = self.addSubInterface(self.flagEditorInterface, FluentIcon.FLAG, "Flag Editor [INTERNAL]")
+        self.addSubInterface(self.modsInterface, PlaceholderFluentIcon.ADD, "Mods")
+        self.addSubInterface(self.flagsInterface, PlaceholderFluentIcon.FLAG, "Flags")
+        self.addSubInterface(self.launchoptionsInterface, PlaceholderFluentIcon.PLAY, "Launch Options")
+        flagEditorSubInterface = self.addSubInterface(self.flagEditorInterface, PlaceholderIcon.FLAG, "Flag Editor [INTERNAL]")
         flagEditorSubInterface.hide()
-        pluginEditorSubInterface = self.addSubInterface(self.pluginEditorInterface, FluentIcon.APPLICATION, "Plugin Editor [INTERNAL]")
+        pluginEditorSubInterface = self.addSubInterface(self.pluginEditorInterface, PlaceholderIcon.APPLICATION, "Plugin Editor [INTERNAL]")
         pluginEditorSubInterface.hide()
-        themeEditorSubInterface = self.addSubInterface(self.themeEditorInterface, FluentIcon.SETTING, "Theme Manager [INTERNAL]")
+        themeEditorSubInterface = self.addSubInterface(self.themeEditorInterface, PlaceholderIcon.SETTING, "Theme Manager [INTERNAL]")
         themeEditorSubInterface.hide()
-        self.addSubInterface(self.settingInterface, FluentIcon.SETTING, "Settings", NavigationItemPosition.BOTTOM)
-        self.navigationInterface.setAcrylicEnabled(True)
+        self.addSubInterface(self.settingInterface, PlaceholderIcon.SETTING, "Settings", NavigationItemPosition.BOTTOM)
+        self.navigationInterface.setPlaceholderAcrylicEnabled(True)
 
-        headerLabelFlags = TitleLabel("Flags")
+        headerLabelFlags = PlaceholderTitleLabel("Flags")
         headerLabelFlags.setFixedHeight(37)  
-        headerLabelFlags.setSizePolicy(QSizePolicy.Fixed, QSizePolicy.Fixed)  
+        headerLabelFlags.setSizePolicy(PlaceholderSizePolicy.Fixed, PlaceholderSizePolicy.Fixed)  
         self.flagsInterface.widget().vBoxLayout.addWidget(headerLabelFlags)
 
-        headerLabelMods = TitleLabel("Mods")
+        headerLabelMods = PlaceholderTitleLabel("Mods")
         headerLabelMods.setFixedHeight(37)
-        headerLabelMods.setSizePolicy(QSizePolicy.Fixed, QSizePolicy.Fixed)
+        headerLabelMods.setSizePolicy(PlaceholderSizePolicy.Fixed, PlaceholderSizePolicy.Fixed)
         self.modsInterface.widget().vBoxLayout.addWidget(headerLabelMods)
 
-        headerLabelFlagEditor = TitleLabel("FastFlag Editor")
+        headerLabelFlagEditor = PlaceholderTitleLabel("FastFlag Editor")
         headerLabelFlagEditor.setFixedHeight(37)  
-        headerLabelFlagEditor.setSizePolicy(QSizePolicy.Fixed, QSizePolicy.Fixed)  
+        headerLabelFlagEditor.setSizePolicy(PlaceholderSizePolicy.Fixed, PlaceholderSizePolicy.Fixed)  
         self.flagEditorInterface.widget().vBoxLayout.addWidget(headerLabelFlagEditor)
 
-        headerLabelpluginEditor = TitleLabel("Plugin Editor")
+        headerLabelpluginEditor = PlaceholderTitleLabel("Plugin Editor")
         headerLabelpluginEditor.setFixedHeight(37)  
-        headerLabelpluginEditor.setSizePolicy(QSizePolicy.Fixed, QSizePolicy.Fixed)  
+        headerLabelpluginEditor.setSizePolicy(PlaceholderSizePolicy.Fixed, PlaceholderSizePolicy.Fixed)  
         self.pluginEditorInterface.widget().vBoxLayout.addWidget(headerLabelpluginEditor)
 
-        headerLabelthemeEditor = TitleLabel("Theme Manager")
+        headerLabelthemeEditor = PlaceholderTitleLabel("Theme Manager")
         headerLabelthemeEditor.setFixedHeight(37)  
-        headerLabelthemeEditor.setSizePolicy(QSizePolicy.Fixed, QSizePolicy.Fixed)  
+        headerLabelthemeEditor.setSizePolicy(PlaceholderSizePolicy.Fixed, PlaceholderSizePolicy.Fixed)  
         self.themeEditorInterface.widget().vBoxLayout.addWidget(headerLabelthemeEditor)
 
-        headerLabelSettings = TitleLabel("Settings")
+        headerLabelSettings = PlaceholderTitleLabel("Settings")
         headerLabelSettings.setFixedHeight(37)
-        headerLabelSettings.setSizePolicy(QSizePolicy.Fixed, QSizePolicy.Fixed)
+        headerLabelSettings.setSizePolicy(PlaceholderSizePolicy.Fixed, PlaceholderSizePolicy.Fixed)
         self.settingInterface.widget().vBoxLayout.addWidget(headerLabelSettings)
 
         self.addLaunchOptionsButtons()
@@ -189,12 +184,12 @@ class Window(FluentWindow):
         self.addThemeEditorContent()
 
     def showUpdateDialog(self):
-        dialog = Dialog("Update Available", "A new version of Roblox Studio Manager is available. Would you like to update?", self)
+        dialog = PlaceholderDialog("Update Available", "A new version of Roblox Studio Manager is available. Would you like to update?", self)
         dialog.yesButton.setText("Update")
         dialog.cancelButton.setText("Ignore")
         
         if dialog.exec_():
-            os.startfile("https://github.com/Firebladedoge229/RobloxStudioManager/releases/latest")
+            os.startfile("https://github.com/Firebladedoge229/RobloxStudioManager-LGPL/releases/latest")
         else:
             pass
 
@@ -206,23 +201,23 @@ class Window(FluentWindow):
                 if "roblox" in cred["TargetName"].lower():
                     win32cred.CredDelete(cred["TargetName"], 1)
                     print(f"\033[1;36mINFO:\033[0m Deleted credential: {cred["TargetName"]}")
-            InfoBar.success(
+            PlaceholderInfoBar.success(
                 title="Roblox Credentials",
                 content="Successfully deleted all of the Roblox-related credentials.",
-                orient=Qt.Horizontal,
+                orient=Placeholder.Horizontal,
                 isClosable=True,
-                position=InfoBarPosition.TOP_RIGHT,
+                position=PlaceholderInfoBarPosition.TOP_RIGHT,
                 duration=2000,
                 parent=self
             )
         except Exception as exception:
             print(f"\033[1;31mERROR:\033[0m: {exception}")
-            InfoBar.error(
+            PlaceholderInfoBar.error(
                 title="Roblox Credentials",
                 content=f"Error attempting to delete Roblox Credentials: {exception}",
-                orient=Qt.Horizontal,
+                orient=Placeholder.Horizontal,
                 isClosable=True,
-                position=InfoBarPosition.TOP_RIGHT,
+                position=PlaceholderInfoBarPosition.TOP_RIGHT,
                 duration=2000,
                 parent=self
             )
@@ -241,7 +236,7 @@ class Window(FluentWindow):
         print("\033[1;32mSUCCESS:\033[0m Successfully patched Roblox Studio for theme use.")
 
     def displayColorPicker(self, title, color, colorDisplay):
-        picker = ColorDialog(color, title, self, enableAlpha=False)
+        picker = ColorPlaceholderDialog(color, title, self, enableAlpha=False)
         if picker.exec():
             colorDisplay.setStyleSheet(f"background-color: rgb({picker.color.red()}, {picker.color.green()}, {picker.color.blue()}); height: 30px; width: 30px; border-radius: 5px;")
             return color
@@ -251,37 +246,37 @@ class Window(FluentWindow):
     def addColorPickerObject(self, title, description, color : QColor, themeEditorLayout):
         titleSpace = "".join([f" {c}" if c.isupper() else c for c in title]).strip()
       
-        container = CardWidget()
+        container = PlaceholderCardWidget()
         container.setFixedHeight(70)
       
-        titleLabel = BodyLabel(titleSpace, container)
-        contentLabel = CaptionLabel(description, container)
+        PlaceholderTitleLabel = PlaceholderBodyLabel(titleSpace, container)
+        contentLabel = PlaceholderCaptionLabel(description, container)
         contentLabel.setTextColor("#606060", "#d2d2d2")
 
-        colorDisplay = PushButton(container)
+        colorDisplay = PlaceholderPushButton(container)
         colorDisplay.setText("")
         colorDisplay.clicked.connect(lambda: self.displayColorPicker(title, color, colorDisplay))
         colorDisplay.setStyleSheet(f"background-color: {color}; height: 30px; width: 30px; border-radius: 5px;")
 
-        hBoxLayout = QHBoxLayout(container)
+        hBoxLayout = PlaceholderHBoxLayout(container)
         hBoxLayout.setContentsMargins(18, 11, 11, 11)
         hBoxLayout.setSpacing(15)
 
-        vBoxLayout = QVBoxLayout()
+        vBoxLayout = PlaceholderVBoxLayout()
         vBoxLayout.setContentsMargins(0, 0, 0, 0)
         vBoxLayout.setSpacing(0)
-        vBoxLayout.addWidget(titleLabel, 0, Qt.AlignVCenter)
-        vBoxLayout.addWidget(contentLabel, 0, Qt.AlignVCenter)
+        vBoxLayout.addWidget(PlaceholderTitleLabel, 0, Placeholder.AlignVCenter)
+        vBoxLayout.addWidget(contentLabel, 0, Placeholder.AlignVCenter)
 
         hBoxLayout.addLayout(vBoxLayout)
         hBoxLayout.addStretch(1)
-        hBoxLayout.addWidget(colorDisplay, 0, Qt.AlignRight)
+        hBoxLayout.addWidget(colorDisplay, 0, Placeholder.AlignRight)
 
         container.isColorPicker = True
 
         themeEditorLayout.addWidget(container)
 
-    def inheritColors(self, theme, themeEditorLayout : QVBoxLayout):
+    def inheritColors(self, theme, themeEditorLayout : PlaceholderVBoxLayout):
         json_data = get_theme_colors(theme)
 
         for i in reversed(range(themeEditorLayout.count())): 
@@ -315,10 +310,10 @@ class Window(FluentWindow):
             
             try:
                 if widget_item.isColorPicker:
-                    title = widget_item.findChild(BodyLabel).text()
+                    title = widget_item.findChild(PlaceholderBodyLabel).text()
                     formatted_title = "".join(word.capitalize() for word in title.split())
-                    description = widget_item.findChild(CaptionLabel).text()
-                    color_display = widget_item.findChild(PushButton)
+                    description = widget_item.findChild(PlaceholderCaptionLabel).text()
+                    color_display = widget_item.findChild(PlaceholderPushButton)
                     color_value = color_display.styleSheet().split(": ")[1].split(";")[0]
 
                     if color_value.startswith("rgb"):
@@ -338,19 +333,19 @@ class Window(FluentWindow):
         return json_string
 
     def importTheme(self, themeEditorLayout):
-        file_dialog = QFileDialog()
+        file_dialog = QFilePlaceholderDialog()
         file_path, _ = file_dialog.getOpenFileName(self, "Select File", "", "Theme Files (*.rbxst);;JSON Files (*.json)")
         if file_path:
             with open(file_path, "r") as file:
                 try:
                     json_data = json.load(file)
                 except Exception as exception:
-                    InfoBar.error(
+                    PlaceholderInfoBar.error(
                         title="Theme Manager",
                         content=f"Error while parsing JSON: {exception}",
-                        orient=Qt.Horizontal,
+                        orient=Placeholder.Horizontal,
                         isClosable=True,
-                        position=InfoBarPosition.TOP_RIGHT,
+                        position=PlaceholderInfoBarPosition.TOP_RIGHT,
                         duration=2000,
                         parent=self
                     )
@@ -378,18 +373,18 @@ class Window(FluentWindow):
                     if isinstance(color_values, list):
                         continue
 
-            InfoBar.success(
+            PlaceholderInfoBar.success(
                         title="Theme Manager",
                         content="Theme loaded successfully.",
-                        orient=Qt.Horizontal,
+                        orient=Placeholder.Horizontal,
                         isClosable=True,
-                        position=InfoBarPosition.TOP_RIGHT,
+                        position=PlaceholderInfoBarPosition.TOP_RIGHT,
                         duration=2000,
                         parent=self
                     )
 
     def exportTheme(self, themeEditorLayout):
-        file_path, _ = QFileDialog.getSaveFileName(self, "Save Theme File", "", "Theme Files (*.rbxst);;JSON Files (*.json)")
+        file_path, _ = QFilePlaceholderDialog.getSaveFileName(self, "Save Theme File", "", "Theme Files (*.rbxst);;JSON Files (*.json)")
 
         if file_path:
             try:
@@ -400,7 +395,7 @@ class Window(FluentWindow):
             except Exception as exception:
                 print(f"\033[1;31mERROR:\033[0m Error saving file: {exception}")
 
-    def togglePlugin(self, plugin : SwitchButton, directory, pluginName):
+    def togglePlugin(self, plugin : PlaceholderSwitchButton, directory, pluginName):
         if plugin.checked:
             toggle_plugin_enabled(os.path.join("DisabledPlugins", pluginName) + f"-{directory}", plugin.checked)
         else:
@@ -411,7 +406,7 @@ class Window(FluentWindow):
         self.inheritColors(theme, themeEditorLayout)
       
     def addPluginToggle(self, pluginName, pluginDirectory, enabled, pluginEditorLayout):
-        container = CardWidget()
+        container = PlaceholderCardWidget()
         container.setFixedHeight(70)
 
         if pluginDirectory == "DisabledPlugins":
@@ -420,35 +415,35 @@ class Window(FluentWindow):
             pluginDirectory = split[1]
             enabled = False
 
-        titleLabel = BodyLabel(pluginName, container)
-        contentLabel = CaptionLabel(pluginDirectory, container)
+        PlaceholderTitleLabel = PlaceholderBodyLabel(pluginName, container)
+        contentLabel = PlaceholderCaptionLabel(pluginDirectory, container)
         contentLabel.setTextColor("#606060", "#d2d2d2")
 
-        enabledToggle = SwitchButton(container)
+        enabledToggle = PlaceholderSwitchButton(container)
         enabledToggle.setOnText("")
         enabledToggle.setOffText("")
         enabledToggle.setChecked(enabled)
         enabledToggle.checkedChanged.connect(lambda : self.togglePlugin(enabledToggle, pluginDirectory, pluginName))
 
-        hBoxLayout = QHBoxLayout(container)
+        hBoxLayout = PlaceholderHBoxLayout(container)
         hBoxLayout.setContentsMargins(18, 11, 11, 11)
         hBoxLayout.setSpacing(15)
 
-        vBoxLayout = QVBoxLayout()
+        vBoxLayout = PlaceholderVBoxLayout()
         vBoxLayout.setContentsMargins(0, 0, 0, 0)
         vBoxLayout.setSpacing(0)
-        vBoxLayout.addWidget(titleLabel, 0, Qt.AlignVCenter)
-        vBoxLayout.addWidget(contentLabel, 0, Qt.AlignVCenter)
+        vBoxLayout.addWidget(PlaceholderTitleLabel, 0, Placeholder.AlignVCenter)
+        vBoxLayout.addWidget(contentLabel, 0, Placeholder.AlignVCenter)
 
         hBoxLayout.addLayout(vBoxLayout)
         hBoxLayout.addStretch(1)
-        hBoxLayout.addWidget(enabledToggle, 0, Qt.AlignRight)
+        hBoxLayout.addWidget(enabledToggle, 0, Placeholder.AlignRight)
 
         pluginEditorLayout.addWidget(container)
 
     def addPluginEditorContent(self):
-        pluginEditorLayout = QVBoxLayout()
-        pluginEditorLayout.setAlignment(Qt.AlignTop)
+        pluginEditorLayout = PlaceholderVBoxLayout()
+        pluginEditorLayout.setAlignment(Placeholder.AlignTop)
         
         plugins = get_builtin_plugins()
 
@@ -458,8 +453,8 @@ class Window(FluentWindow):
             file_enabled = plugin["enabled"]
             self.addPluginToggle(file_name, file_base_folder, file_enabled, pluginEditorLayout)
         
-        scrollArea = SingleDirectionScrollArea(orient=Qt.Vertical)
-        scrollWidget = QWidget(self.themeEditorInterface)
+        scrollArea = PlaceholderSingleDirectionScrollArea(orient=Placeholder.Vertical)
+        scrollWidget = PlaceholderWidget(self.themeEditorInterface)
         scrollWidget.setLayout(pluginEditorLayout)
 
         scrollArea.setWidget(scrollWidget)
@@ -468,50 +463,50 @@ class Window(FluentWindow):
         self.pluginEditorInterface.widget().vBoxLayout.addWidget(scrollArea)
 
     def addThemeEditorContent(self):
-        themeEditorLayout = QVBoxLayout()
-        themeEditorLayout.setAlignment(Qt.AlignTop)
+        themeEditorLayout = PlaceholderVBoxLayout()
+        themeEditorLayout.setAlignment(Placeholder.AlignTop)
 
-        container = CardWidget()
+        container = PlaceholderCardWidget()
         container.setFixedHeight(70)
 
-        iconWidget = IconWidget(FluentIcon.SAVE_AS)
+        iconWidget = PlaceholderIconWidget(PlaceholderFluentIcon.SAVE_AS)
         iconWidget.setFixedSize(16, 16)
-        titleLabel = BodyLabel("Theme Patcher", container)
-        contentLabel = CaptionLabel("Patch Roblox Studio to be able to run aboriginal themes.", container)
+        PlaceholderTitleLabel = PlaceholderBodyLabel("Theme Patcher", container)
+        contentLabel = PlaceholderCaptionLabel("Patch Roblox Studio to be able to run aboriginal themes.", container)
         contentLabel.setTextColor("#606060", "#d2d2d2")
 
-        self.patchButton = PrimaryPushButton(container)
+        self.patchButton = PrimaryPlaceholderPushButton(container)
         self.patchButton.setText("Patch")
         self.patchButton.clicked.connect(self.on_patch_button_clicked)
 
         global patchProgress
-        patchProgress = IndeterminateProgressBar(start = False)
+        patchProgress = PlaceholderIndeterminateProgressBar(start = False)
 
-        hBoxLayout = QHBoxLayout(container)
+        hBoxLayout = PlaceholderHBoxLayout(container)
         hBoxLayout.setContentsMargins(16, 11, 11, 11)
-        hBoxLayout.addWidget(iconWidget, 0, Qt.AlignLeft)
+        hBoxLayout.addWidget(iconWidget, 0, Placeholder.AlignLeft)
         hBoxLayout.setSpacing(15)
 
-        vBoxLayout = QVBoxLayout()
+        vBoxLayout = PlaceholderVBoxLayout()
         vBoxLayout.setContentsMargins(0, 0, 0, 0)
         vBoxLayout.setSpacing(0)
-        vBoxLayout.addWidget(titleLabel, 0, Qt.AlignVCenter)
-        vBoxLayout.addWidget(contentLabel, 0, Qt.AlignVCenter)
+        vBoxLayout.addWidget(PlaceholderTitleLabel, 0, Placeholder.AlignVCenter)
+        vBoxLayout.addWidget(contentLabel, 0, Placeholder.AlignVCenter)
 
         hBoxLayout.addLayout(vBoxLayout)
         hBoxLayout.addStretch(1)
-        hBoxLayout.addWidget(self.patchButton, 0, Qt.AlignRight)
+        hBoxLayout.addWidget(self.patchButton, 0, Placeholder.AlignRight)
 
         themeEditorLayout.addWidget(patchProgress)
         themeEditorLayout.addWidget(container)
 
-        container = CardWidget()
+        container = PlaceholderCardWidget()
         container.setFixedHeight(70)
 
-        iconWidget = IconWidget(FluentIcon.SETTING)
+        iconWidget = PlaceholderIconWidget(PlaceholderFluentIcon.SETTING)
         iconWidget.setFixedSize(16, 16)
-        titleLabel = BodyLabel("Inherited Theme", container)
-        contentLabel = CaptionLabel("Choose the theme to inherit the colors from", container)
+        PlaceholderTitleLabel = PlaceholderBodyLabel("Inherited Theme", container)
+        contentLabel = PlaceholderCaptionLabel("Choose the theme to inherit the colors from", container)
         contentLabel.setTextColor("#606060", "#d2d2d2")
 
         self.inheritDropdown = ComboBox(container)
@@ -519,63 +514,63 @@ class Window(FluentWindow):
         self.inheritDropdown.setCurrentIndex(0)
         self.inheritDropdown.currentIndexChanged.connect(lambda : self.inheritColors(self.inheritDropdown.currentText(), themeEditorLayout))
 
-        hBoxLayout = QHBoxLayout(container)
+        hBoxLayout = PlaceholderHBoxLayout(container)
         hBoxLayout.setContentsMargins(16, 11, 11, 11)
-        hBoxLayout.addWidget(iconWidget, 0, Qt.AlignLeft)
+        hBoxLayout.addWidget(iconWidget, 0, Placeholder.AlignLeft)
         hBoxLayout.setSpacing(15)
 
-        vBoxLayout = QVBoxLayout()
+        vBoxLayout = PlaceholderVBoxLayout()
         vBoxLayout.setContentsMargins(0, 0, 0, 0)
         vBoxLayout.setSpacing(0)
-        vBoxLayout.addWidget(titleLabel, 0, Qt.AlignVCenter)
-        vBoxLayout.addWidget(contentLabel, 0, Qt.AlignVCenter)
+        vBoxLayout.addWidget(PlaceholderTitleLabel, 0, Placeholder.AlignVCenter)
+        vBoxLayout.addWidget(contentLabel, 0, Placeholder.AlignVCenter)
 
         hBoxLayout.addLayout(vBoxLayout)
         hBoxLayout.addStretch(1)
-        hBoxLayout.addWidget(self.inheritDropdown, 0, Qt.AlignRight)
+        hBoxLayout.addWidget(self.inheritDropdown, 0, Placeholder.AlignRight)
 
         themeEditorLayout.addWidget(container)
 
-        container = CardWidget()
+        container = PlaceholderCardWidget()
         container.setFixedHeight(70)
 
-        iconWidget = IconWidget(FluentIcon.EMBED)
+        iconWidget = PlaceholderIconWidget(PlaceholderFluentIcon.EMBED)
         iconWidget.setFixedSize(16, 16)
-        titleLabel = BodyLabel("Data Operations", container)
-        contentLabel = CaptionLabel("Choose whether you would like to import or export a theme.", container)
+        PlaceholderTitleLabel = PlaceholderBodyLabel("Data Operations", container)
+        contentLabel = PlaceholderCaptionLabel("Choose whether you would like to import or export a theme.", container)
         contentLabel.setTextColor("#606060", "#d2d2d2")
 
-        self.importButton = PushButton(container)
+        self.importButton = PlaceholderPushButton(container)
         self.importButton.setText("Import")
         self.importButton.clicked.connect(lambda: self.importTheme(themeEditorLayout))
 
-        self.exportButton = PushButton(container)
+        self.exportButton = PlaceholderPushButton(container)
         self.exportButton.setText("Export")
         self.exportButton.clicked.connect(lambda: self.exportTheme(themeEditorLayout))
 
-        self.resetButton = PushButton(container)
+        self.resetButton = PlaceholderPushButton(container)
         self.resetButton.setText("Reset")
         self.resetButton.clicked.connect(lambda : self.redownloadDefaultThemes(self.inheritDropdown.currentText(), themeEditorLayout))
 
-        self.applyButton = PrimaryPushButton(container)
+        self.applyButton = PrimaryPlaceholderPushButton(container)
         self.applyButton.setText("Save")
         self.applyButton.clicked.connect(lambda: apply_custom_theme(self.rebuildJSON(themeEditorLayout)))
 
-        hBoxLayout = QHBoxLayout(container)
+        hBoxLayout = PlaceholderHBoxLayout(container)
         hBoxLayout.setContentsMargins(16, 11, 11, 11)
-        hBoxLayout.addWidget(iconWidget, 0, Qt.AlignLeft)
+        hBoxLayout.addWidget(iconWidget, 0, Placeholder.AlignLeft)
         hBoxLayout.setSpacing(15)
 
-        vBoxLayout = QVBoxLayout()
+        vBoxLayout = PlaceholderVBoxLayout()
         vBoxLayout.setContentsMargins(0, 0, 0, 0)
         vBoxLayout.setSpacing(0)
-        vBoxLayout.addWidget(titleLabel, 0, Qt.AlignVCenter)
-        vBoxLayout.addWidget(contentLabel, 0, Qt.AlignVCenter)
+        vBoxLayout.addWidget(PlaceholderTitleLabel, 0, Placeholder.AlignVCenter)
+        vBoxLayout.addWidget(contentLabel, 0, Placeholder.AlignVCenter)
 
         hBoxLayout.addLayout(vBoxLayout)
         hBoxLayout.addStretch(1)
 
-        buttonLayout = QHBoxLayout()
+        buttonLayout = PlaceholderHBoxLayout()
         buttonLayout.addWidget(self.importButton)
         buttonLayout.addWidget(self.exportButton)
         buttonLayout.addWidget(self.resetButton)
@@ -588,8 +583,8 @@ class Window(FluentWindow):
 
         self.inheritColors("LightTheme", themeEditorLayout)
 
-        scrollArea = SingleDirectionScrollArea(orient=Qt.Vertical)
-        scrollWidget = QWidget(self.themeEditorInterface)
+        scrollArea = PlaceholderSingleDirectionScrollArea(orient=Placeholder.Vertical)
+        scrollWidget = PlaceholderWidget(self.themeEditorInterface)
         scrollWidget.setLayout(themeEditorLayout)
 
         scrollArea.setWidget(scrollWidget)
@@ -599,57 +594,57 @@ class Window(FluentWindow):
 
     def addHomepageContent(self):
 
-        homeLayout = QVBoxLayout(self.homeInterface)
-        homeLayout.setAlignment(Qt.AlignCenter)
+        homeLayout = PlaceholderVBoxLayout(self.homeInterface)
+        homeLayout.setAlignment(Placeholder.AlignCenter)
 
-        logoLabel = QLabel()
-        logoPixmap = QPixmap("RobloxStudioManager.png")
+        logoLabel = PlaceholderLabel()
+        logoPixmap = PlaceholderPixmap("RobloxStudioManager.png")
 
         max_width = 700
         max_height = 700
-        logoPixmap = logoPixmap.scaled(max_width, max_height, Qt.KeepAspectRatio, Qt.SmoothTransformation)
+        logoPixmap = logoPixmap.scaled(max_width, max_height, Placeholder.KeepAspectRatio, Placeholder.SmoothTransformation)
 
         logoLabel.setPixmap(logoPixmap)
-        logoLabel.setAlignment(Qt.AlignCenter)
+        logoLabel.setAlignment(Placeholder.AlignCenter)
 
-        titleLabel = TitleLabel("Welcome to Roblox Studio Manager Remastered")
-        descriptionLabel = SubtitleLabel("Manage your Roblox Studio settings and plugins easily.")
+        PlaceholderTitleLabel = PlaceholderTitleLabel("Welcome to Roblox Studio Manager Remastered")
+        descriptionLabel = SubPlaceholderTitleLabel("Manage your Roblox Studio settings and plugins easily.")
 
-        titleLabel.setAlignment(Qt.AlignCenter)
-        descriptionLabel.setAlignment(Qt.AlignCenter)
+        PlaceholderTitleLabel.setAlignment(Placeholder.AlignCenter)
+        descriptionLabel.setAlignment(Placeholder.AlignCenter)
 
         homeLayout.addWidget(logoLabel)
-        homeLayout.addWidget(titleLabel)
+        homeLayout.addWidget(PlaceholderTitleLabel)
         homeLayout.addWidget(descriptionLabel)
 
         release_info = self.fetchLatestReleaseInfo()
 
-        releaseLayout = QVBoxLayout()
-        releaseLayout.setAlignment(Qt.AlignTop)
+        releaseLayout = PlaceholderVBoxLayout()
+        releaseLayout.setAlignment(Placeholder.AlignTop)
 
-        releaseLabel = TitleLabel(f"Latest Release: {release_info["tag_name"]}")
-        releaseLabel.setAlignment(Qt.AlignCenter)
+        releaseLabel = PlaceholderTitleLabel(f"Latest Release: {release_info["tag_name"]}")
+        releaseLabel.setAlignment(Placeholder.AlignCenter)
         releaseLabel.setWordWrap(True)
 
-        releaseDescriptionLabel = SubtitleLabel(f"{release_info["body"].split("**Differences**")[0]}")
-        releaseDescriptionLabel.setAlignment(Qt.AlignCenter)
+        releaseDescriptionLabel = SubPlaceholderTitleLabel(f"{release_info["body"].split("**Differences**")[0]}")
+        releaseDescriptionLabel.setAlignment(Placeholder.AlignCenter)
         releaseDescriptionLabel.setWordWrap(True)
 
         releaseLayout.addWidget(releaseLabel)
         releaseLayout.addWidget(releaseDescriptionLabel)
 
-        releaseScrollArea = SingleDirectionScrollArea(orient=Qt.Vertical)
+        releaseScrollArea = PlaceholderSingleDirectionScrollArea(orient=Placeholder.Vertical)
         releaseScrollArea.setWidgetResizable(True)
 
-        releaseWidget = QWidget(self.homeInterface)
+        releaseWidget = PlaceholderWidget(self.homeInterface)
         releaseWidget.setLayout(releaseLayout)
 
         releaseScrollArea.setWidget(releaseWidget)
 
         homeLayout.addWidget(releaseScrollArea)
 
-        scrollArea = SingleDirectionScrollArea(orient=Qt.Vertical)  
-        scrollWidget = QWidget(self.homeInterface)
+        scrollArea = PlaceholderSingleDirectionScrollArea(orient=Placeholder.Vertical)  
+        scrollWidget = PlaceholderWidget(self.homeInterface)
         scrollWidget.setLayout(homeLayout)
 
         scrollArea.setWidget(scrollWidget)
@@ -661,19 +656,19 @@ class Window(FluentWindow):
         self.selectedChannel = ""
         self.selectedFolderPath = ""
 
-        settingsLayout = QVBoxLayout()
-        settingsLayout.setAlignment(Qt.AlignTop)
+        settingsLayout = PlaceholderVBoxLayout()
+        settingsLayout.setAlignment(Placeholder.AlignTop)
 
-        channelDownloaderCard = ExpandGroupSettingCard(FluentIcon.DOWNLOAD, "Channel", "Pick a channel to download Roblox from.", self.settingInterface)
+        channelDownloaderCard = PlaceholderExpandGroupSettingCard(PlaceholderFluentIcon.DOWNLOAD, "Channel", "Pick a channel to download Roblox from.", self.settingInterface)
         settingsLayout.addWidget(channelDownloaderCard)
 
-        self.channelLineEdit = LineEdit()
-        self.channelLineEdit.setPlaceholderText("Enter Channel")
-        self.channelLineEdit.returnPressed.connect(self.onChannelReturnPressed)
-        channelDownloaderCard.addWidget(self.channelLineEdit)
+        self.channelPlaceholderLineEdit = PlaceholderLineEdit()
+        self.channelPlaceholderLineEdit.setPlaceholderText("Enter Channel")
+        self.channelPlaceholderLineEdit.returnPressed.connect(self.onChannelReturnPressed)
+        channelDownloaderCard.addWidget(self.channelPlaceholderLineEdit)
 
-        folderButton = ToolButton(FluentIcon.FOLDER)
-        downloadButton = PrimaryPushButton("Download")
+        folderButton = PlaceholderToolButton(PlaceholderFluentIcon.FOLDER)
+        downloadButton = PrimaryPlaceholderPushButton("Download")
 
         channelDownloaderCard.addWidget(folderButton)
         channelDownloaderCard.addWidget(downloadButton)
@@ -681,9 +676,9 @@ class Window(FluentWindow):
         folderButton.clicked.connect(self.onFolderIconClicked)
         downloadButton.clicked.connect(self.startDownload)
 
-        self.versionCard = SettingCard(title="Version", icon=FluentIcon.INFO, content="")
-        self.versionGuidCard = SettingCard(title="VersionGuid", icon=FluentIcon.TAG, content="")
-        self.deployedCard = SettingCard(title="Deployed", icon=FluentIcon.DATE_TIME, content="")
+        self.versionCard = PlaceholderSettingCard(title="Version", icon=PlaceholderFluentIcon.INFO, content="")
+        self.versionGuidCard = PlaceholderSettingCard(title="VersionGuid", icon=PlaceholderFluentIcon.TAG, content="")
+        self.deployedCard = PlaceholderSettingCard(title="Deployed", icon=PlaceholderFluentIcon.DATE_TIME, content="")
 
         self.fetchVersionInfo()
         self.fetchDeployHistory()
@@ -692,68 +687,68 @@ class Window(FluentWindow):
         channelDownloaderCard.addGroupWidget(self.versionGuidCard)
         channelDownloaderCard.addGroupWidget(self.deployedCard)
 
-        container = CardWidget()
+        container = PlaceholderCardWidget()
         container.setFixedHeight(70)
 
-        iconWidget = IconWidget(FluentIcon.CLOSE)
+        iconWidget = PlaceholderIconWidget(PlaceholderFluentIcon.CLOSE)
         iconWidget.setFixedSize(16, 16)
-        titleLabel = BodyLabel("Roblox Credentials", container)
-        contentLabel = CaptionLabel("Clear stored Roblox credentials in the Windows Credentials Manager to resolve login issues in Roblox Studio.", container)
+        PlaceholderTitleLabel = PlaceholderBodyLabel("Roblox Credentials", container)
+        contentLabel = PlaceholderCaptionLabel("Clear stored Roblox credentials in the Windows Credentials Manager to resolve login issues in Roblox Studio.", container)
         contentLabel.setTextColor("#606060", "#d2d2d2")
 
-        self.clearButton = PushButton(container)
+        self.clearButton = PlaceholderPushButton(container)
         self.clearButton.setText("Clear Credentials")
         self.clearButton.clicked.connect(self.deleteCredentials)
 
-        hBoxLayout = QHBoxLayout(container)
+        hBoxLayout = PlaceholderHBoxLayout(container)
         hBoxLayout.setContentsMargins(16, 11, 11, 11)
-        hBoxLayout.addWidget(iconWidget, 0, Qt.AlignLeft)
+        hBoxLayout.addWidget(iconWidget, 0, Placeholder.AlignLeft)
         hBoxLayout.setSpacing(15)
 
-        vBoxLayout = QVBoxLayout()
+        vBoxLayout = PlaceholderVBoxLayout()
         vBoxLayout.setContentsMargins(0, 0, 0, 0)
         vBoxLayout.setSpacing(0)
-        vBoxLayout.addWidget(titleLabel, 0, Qt.AlignVCenter)
-        vBoxLayout.addWidget(contentLabel, 0, Qt.AlignVCenter)
+        vBoxLayout.addWidget(PlaceholderTitleLabel, 0, Placeholder.AlignVCenter)
+        vBoxLayout.addWidget(contentLabel, 0, Placeholder.AlignVCenter)
 
         hBoxLayout.addLayout(vBoxLayout)
         hBoxLayout.addStretch(1)
-        hBoxLayout.addWidget(self.clearButton, 0, Qt.AlignRight)
+        hBoxLayout.addWidget(self.clearButton, 0, Placeholder.AlignRight)
 
         settingsLayout.addWidget(container)
 
-        container = CardWidget()
+        container = PlaceholderCardWidget()
         container.setFixedHeight(70)
 
-        iconWidget = IconWidget(FluentIcon.PALETTE)
+        iconWidget = PlaceholderIconWidget(PlaceholderFluentIcon.PALETTE)
         iconWidget.setFixedSize(16, 16)
-        titleLabel = BodyLabel("Theme Manager", container)
-        contentLabel = CaptionLabel("Edit and customize colors for the Roblox Studio User Interface.", container)
+        PlaceholderTitleLabel = PlaceholderBodyLabel("Theme Manager", container)
+        contentLabel = PlaceholderCaptionLabel("Edit and customize colors for the Roblox Studio User Interface.", container)
         contentLabel.setTextColor("#606060", "#d2d2d2")
 
-        self.modifyButton = PrimaryPushButton(container)
+        self.modifyButton = PrimaryPlaceholderPushButton(container)
         self.modifyButton.setText("Modify")
         self.modifyButton.clicked.connect(lambda : self.switchTo(self.themeEditorInterface))
 
-        hBoxLayout = QHBoxLayout(container)
+        hBoxLayout = PlaceholderHBoxLayout(container)
         hBoxLayout.setContentsMargins(16, 11, 11, 11)
-        hBoxLayout.addWidget(iconWidget, 0, Qt.AlignLeft)
+        hBoxLayout.addWidget(iconWidget, 0, Placeholder.AlignLeft)
         hBoxLayout.setSpacing(15)
 
-        vBoxLayout = QVBoxLayout()
+        vBoxLayout = PlaceholderVBoxLayout()
         vBoxLayout.setContentsMargins(0, 0, 0, 0)
         vBoxLayout.setSpacing(0)
-        vBoxLayout.addWidget(titleLabel, 0, Qt.AlignVCenter)
-        vBoxLayout.addWidget(contentLabel, 0, Qt.AlignVCenter)
+        vBoxLayout.addWidget(PlaceholderTitleLabel, 0, Placeholder.AlignVCenter)
+        vBoxLayout.addWidget(contentLabel, 0, Placeholder.AlignVCenter)
 
         hBoxLayout.addLayout(vBoxLayout)
         hBoxLayout.addStretch(1)
-        hBoxLayout.addWidget(self.modifyButton, 0, Qt.AlignRight)
+        hBoxLayout.addWidget(self.modifyButton, 0, Placeholder.AlignRight)
 
         settingsLayout.addWidget(container)
 
-        scrollArea = SingleDirectionScrollArea(orient=Qt.Vertical)
-        scrollWidget = QWidget(self.settingInterface)
+        scrollArea = PlaceholderSingleDirectionScrollArea(orient=Placeholder.Vertical)
+        scrollWidget = PlaceholderWidget(self.settingInterface)
         scrollWidget.setLayout(settingsLayout)
 
         scrollArea.setWidget(scrollWidget)
@@ -762,7 +757,7 @@ class Window(FluentWindow):
         self.settingInterface.widget().vBoxLayout.addWidget(scrollArea)
 
         global progressBar
-        progressBar = IndeterminateProgressBar(start = False)
+        progressBar = PlaceholderIndeterminateProgressBar(start = False)
 
         channelDownloaderCard.addGroupWidget(progressBar)
 
@@ -799,18 +794,18 @@ class Window(FluentWindow):
     class JSONInput(MessageBoxBase):
         def __init__(self, parent=None):
             super().__init__(parent)
-            self.titleLabel = SubtitleLabel("JSON Input")
-            self.jsonLineEdit = LineEdit()
+            self.PlaceholderTitleLabel = SubPlaceholderTitleLabel("JSON Input")
+            self.jsonPlaceholderLineEdit = PlaceholderLineEdit()
 
-            self.jsonLineEdit.setPlaceholderText("JSON Text")
-            self.jsonLineEdit.setClearButtonEnabled(True)
+            self.jsonPlaceholderLineEdit.setPlaceholderText("JSON Text")
+            self.jsonPlaceholderLineEdit.setClearButtonEnabled(True)
 
-            self.viewLayout.addWidget(self.titleLabel)
-            self.viewLayout.addWidget(self.jsonLineEdit)
+            self.viewLayout.addWidget(self.PlaceholderTitleLabel)
+            self.viewLayout.addWidget(self.jsonPlaceholderLineEdit)
 
             self.widget.setMinimumWidth(350)
 
-    class UpdateThread(QThread):
+    class UpdateThread(PlaceholderThread):
         def run(self):
             update_studio()
 
@@ -822,7 +817,7 @@ class Window(FluentWindow):
         prompt = self.JSONInput(self)
         if prompt.exec():
             try:
-                data = json.loads(prompt.jsonLineEdit.text())
+                data = json.loads(prompt.jsonPlaceholderLineEdit.text())
                 flagList = [[key, str(value)] for key, value in data.items()]
                 self.rowCount = len(flagList) if flagList else 0
                 flagTable.setRowCount(self.rowCount)
@@ -830,12 +825,12 @@ class Window(FluentWindow):
                     for j in range(2):
                         flagTable.setItem(i, j, QTableWidgetItem(flag[j]))
             except Exception as exception:
-                InfoBar.error(
+                PlaceholderInfoBar.error(
                     title="FastFlag Manager",
                     content=f"Error while parsing JSON: {exception}",
-                    orient=Qt.Horizontal,
+                    orient=Placeholder.Horizontal,
                     isClosable=True,
-                    position=InfoBarPosition.TOP_RIGHT,
+                    position=PlaceholderInfoBarPosition.TOP_RIGHT,
                     duration=2000,
                     parent=self
                 )
@@ -881,14 +876,14 @@ class Window(FluentWindow):
                 self.flagTable.setRowHidden(row, True)
 
     def addFlagEditorContent(self):
-        flagEditorLayout = QVBoxLayout()
-        flagEditorLayout.setAlignment(Qt.AlignTop)
+        flagEditorLayout = PlaceholderVBoxLayout()
+        flagEditorLayout.setAlignment(Placeholder.AlignTop)
 
-        backButton = PushButton(FluentIcon.LEFT_ARROW, "Back")
-        addButton = PushButton(FluentIcon.ADD, "Add Flag")
-        deleteButton = PushButton(FluentIcon.DELETE, "Delete")
-        importButton = PushButton(FluentIcon.DOWNLOAD, "Import JSON")
-        saveButton = PrimaryPushButton(FluentIcon.SAVE, "Save")
+        backButton = PlaceholderPushButton(PlaceholderFluentIcon.LEFT_ARROW, "Back")
+        addButton = PlaceholderPushButton(PlaceholderFluentIcon.ADD, "Add Flag")
+        deleteButton = PlaceholderPushButton(PlaceholderFluentIcon.DELETE, "Delete")
+        importButton = PlaceholderPushButton(PlaceholderFluentIcon.DOWNLOAD, "Import JSON")
+        saveButton = PrimaryPlaceholderPushButton(PlaceholderFluentIcon.SAVE, "Save")
 
         backButton.clicked.connect(lambda : self.switchTo(self.flagsInterface))
         addButton.clicked.connect(lambda : self.addRow(self.flagTable))
@@ -896,7 +891,7 @@ class Window(FluentWindow):
         importButton.clicked.connect(lambda: self.promptJSONInput(self.flagTable))
         saveButton.clicked.connect(lambda: save_custom_flags(self.tableToJSON(self.flagTable)))
 
-        buttonRowLayout = QHBoxLayout()
+        buttonRowLayout = PlaceholderHBoxLayout()
         buttonRowLayout.setSpacing(10)
         buttonRowLayout.addWidget(backButton)
         buttonRowLayout.addWidget(addButton)
@@ -906,7 +901,7 @@ class Window(FluentWindow):
 
         flagEditorLayout.addLayout(buttonRowLayout)
 
-        self.searchEdit = SearchLineEdit()
+        self.searchEdit = SearchPlaceholderLineEdit()
         self.searchEdit.setPlaceholderText("Search")
         flagEditorLayout.addWidget(self.searchEdit)
 
@@ -941,8 +936,8 @@ class Window(FluentWindow):
 
         flagEditorLayout.addWidget(self.flagTable)
 
-        scrollArea = SingleDirectionScrollArea(orient=Qt.Vertical)
-        scrollWidget = QWidget(self.flagEditorInterface)
+        scrollArea = PlaceholderSingleDirectionScrollArea(orient=Placeholder.Vertical)
+        scrollWidget = PlaceholderWidget(self.flagEditorInterface)
         scrollWidget.setLayout(flagEditorLayout)
 
         scrollArea.setWidget(scrollWidget)
@@ -961,26 +956,26 @@ class Window(FluentWindow):
             downloadChannel = self.selectedChannel
             if not downloadChannel:
                 downloadChannel = "LIVE"
-            InfoBar.success(
+            PlaceholderInfoBar.success(
                 title="Download Manager",
                 content=f"Started worker process for Roblox Studio on channel {self.selectedChannel}.",
-                orient=Qt.Horizontal,
+                orient=Placeholder.Horizontal,
                 isClosable=True,
-                position=InfoBarPosition.TOP_RIGHT,
+                position=PlaceholderInfoBarPosition.TOP_RIGHT,
                 duration=2000,
                 parent=self
             )
 
     def onFolderIconClicked(self):
-        print("\033[1;36mINFO:\033[0m Folder Dialog Opened")
-        folder = QFileDialog.getExistingDirectory(self, "Select Folder", "", QFileDialog.ShowDirsOnly)
+        print("\033[1;36mINFO:\033[0m Folder PlaceholderDialog Opened")
+        folder = QFilePlaceholderDialog.getExistingDirectory(self, "Select Folder", "", QFilePlaceholderDialog.ShowDirsOnly)
         if folder:
             self.selectedFolderPath = folder
             print("\033[1;36mINFO:\033[0m Selected Folder:", self.selectedFolderPath)
-        print("\033[1;36mINFO:\033[0m Folder Dialog Closed")
+        print("\033[1;36mINFO:\033[0m Folder PlaceholderDialog Closed")
 
     def onChannelReturnPressed(self):
-        channel = self.channelLineEdit.text().strip()
+        channel = self.channelPlaceholderLineEdit.text().strip()
 
         self.selectedChannel = channel.strip()
 
@@ -1006,12 +1001,12 @@ class Window(FluentWindow):
                     self.updateDeploymentInfo(date_time, version)
                     break
         except Exception as exception:
-            InfoBar.error(
+            PlaceholderInfoBar.error(
                 title="Download Manager",
                 content=f"Error while fetching Deploy History: {exception}",
-                orient=Qt.Horizontal,
+                orient=Placeholder.Horizontal,
                 isClosable=True,
-                position=InfoBarPosition.TOP_RIGHT,
+                position=PlaceholderInfoBarPosition.TOP_RIGHT,
                 duration=2000,
                 parent=self
             )
@@ -1034,12 +1029,12 @@ class Window(FluentWindow):
                         self.updateVersionInfo(versionGuid)
                         break
         except Exception as exception:
-            InfoBar.error(
+            PlaceholderInfoBar.error(
                 title="Download Manager",
                 content=f"Error while fetching Version Info: {exception}",
-                orient=Qt.Horizontal,
+                orient=Placeholder.Horizontal,
                 isClosable=True,
-                position=InfoBarPosition.TOP_RIGHT,
+                position=PlaceholderInfoBarPosition.TOP_RIGHT,
                 duration=2000,
                 parent=self
             )
@@ -1068,12 +1063,12 @@ class Window(FluentWindow):
             return release_info
 
         except requests.exceptions.RequestException as exception:
-            InfoBar.error(
+            PlaceholderInfoBar.error(
                 title="Download Manager",
                 content=f"Error while fetching release info: {exception}",
-                orient=Qt.Horizontal,
+                orient=Placeholder.Horizontal,
                 isClosable=True,
-                position=InfoBarPosition.TOP_RIGHT,
+                position=PlaceholderInfoBarPosition.TOP_RIGHT,
                 duration=2000,
                 parent=self
             )
@@ -1124,51 +1119,51 @@ class Window(FluentWindow):
                     self.addTypeOption(type_option["Title"], type_option["Description"], type_option["Section"], type_option["Accept"], type_option["InternetRequired"])
 
         except FileNotFoundError:
-            InfoBar.error(
+            PlaceholderInfoBar.error(
                 title="Roblox Studio Manager",
                 content="Error while fetching options.json: File not found!",
-                orient=Qt.Horizontal,
+                orient=Placeholder.Horizontal,
                 isClosable=True,
-                position=InfoBarPosition.TOP_RIGHT,
+                position=PlaceholderInfoBarPosition.TOP_RIGHT,
                 duration=2000,
                 parent=self
             )
             print("\033[1;31mDATA ERROR:\033[0m options.json not found!")
 
-        bottomSpacer = QSpacerItem(20, 40, QSizePolicy.Minimum, QSizePolicy.Expanding)
+        bottomSpacer = QSpacerItem(20, 40, PlaceholderSizePolicy.Minimum, PlaceholderSizePolicy.Expanding)
         self.modsInterface.widget().vBoxLayout.addItem(bottomSpacer)
 
-        bottomSpacer = QSpacerItem(20, 40, QSizePolicy.Minimum, QSizePolicy.Expanding)
+        bottomSpacer = QSpacerItem(20, 40, PlaceholderSizePolicy.Minimum, PlaceholderSizePolicy.Expanding)
         self.flagsInterface.widget().vBoxLayout.addItem(bottomSpacer)
  
     def addFlagEditorCard(self):
-        container = CardWidget()
+        container = PlaceholderCardWidget()
         container.setFixedHeight(73)
 
-        iconWidget = IconWidget(FluentIcon.FLAG)
+        iconWidget = PlaceholderIconWidget(PlaceholderFluentIcon.FLAG)
         iconWidget.setFixedSize(21, 21)
-        titleLabel = BodyLabel("FastFlag Editor", container)
-        contentLabel = CaptionLabel("Configure and override Roblox FastFlags for fine-tuned performance and feature control.", container)
+        PlaceholderTitleLabel = PlaceholderBodyLabel("FastFlag Editor", container)
+        contentLabel = PlaceholderCaptionLabel("Configure and override Roblox FastFlags for fine-tuned performance and feature control.", container)
         contentLabel.setTextColor("#606060", "#d2d2d2")
 
-        self.flagButton = PushButton(container)
+        self.flagButton = PlaceholderPushButton(container)
         self.flagButton.setText("Navigate")
         self.flagButton.clicked.connect(lambda : self.switchTo(self.flagEditorInterface))
 
-        hBoxLayout = QHBoxLayout(container)
+        hBoxLayout = PlaceholderHBoxLayout(container)
         hBoxLayout.setContentsMargins(18, 11, 11, 11)
-        hBoxLayout.addWidget(iconWidget, 0, Qt.AlignLeft)
+        hBoxLayout.addWidget(iconWidget, 0, Placeholder.AlignLeft)
         hBoxLayout.setSpacing(15)
 
-        vBoxLayout = QVBoxLayout()
+        vBoxLayout = PlaceholderVBoxLayout()
         vBoxLayout.setContentsMargins(0, 0, 0, 0)
         vBoxLayout.setSpacing(0)
-        vBoxLayout.addWidget(titleLabel, 0, Qt.AlignVCenter)
-        vBoxLayout.addWidget(contentLabel, 0, Qt.AlignVCenter)
+        vBoxLayout.addWidget(PlaceholderTitleLabel, 0, Placeholder.AlignVCenter)
+        vBoxLayout.addWidget(contentLabel, 0, Placeholder.AlignVCenter)
 
         hBoxLayout.addLayout(vBoxLayout)
         hBoxLayout.addStretch(1)
-        hBoxLayout.addWidget(self.flagButton, 0, Qt.AlignRight)
+        hBoxLayout.addWidget(self.flagButton, 0, Placeholder.AlignRight)
 
         self.flagsInterface.widget().vBoxLayout.addWidget(container)
 
@@ -1181,25 +1176,25 @@ class Window(FluentWindow):
 
         self.addFlagEditorCard()
 
-        applyButton = PrimaryPushButton("Apply Settings")
+        applyButton = PrimaryPlaceholderPushButton("Apply Settings")
         applyButton.clicked.connect(self.applySettings)
 
-        resetButton = PushButton("Reset Configuration")
+        resetButton = PlaceholderPushButton("Reset Configuration")
         resetButton.clicked.connect(self.resetConfiguration)
 
-        installButton = PushButton("Installation Folder")
+        installButton = PlaceholderPushButton("Installation Folder")
         installButton.clicked.connect(open_installation_folder)
 
-        launchButton = PrimaryPushButton("Launch Studio")
+        launchButton = PrimaryPlaceholderPushButton("Launch Studio")
         launchButton.clicked.connect(launch_studio)
 
-        updateButton = PushButton("Update Studio")
+        updateButton = PlaceholderPushButton("Update Studio")
         updateButton.clicked.connect(self.start_update)
 
-        pluginButton = PushButton("Plugin Editor")
+        pluginButton = PlaceholderPushButton("Plugin Editor")
         pluginButton.clicked.connect(lambda: self.switchTo(self.pluginEditorInterface))
 
-        themeButton = PushButton("Theme Manager")
+        themeButton = PlaceholderPushButton("Theme Manager")
         themeButton.clicked.connect(lambda: self.switchTo(self.themeEditorInterface))
 
         self.launchoptionsInterface.widget().vBoxLayout.addWidget(applyButton)
@@ -1216,10 +1211,10 @@ class Window(FluentWindow):
         separator.setFrameShape(QFrame.HLine)
         separator.setFrameShadow(QFrame.Sunken)
 
-        titleLabel = SubtitleLabel(section_title)
+        PlaceholderTitleLabel = SubPlaceholderTitleLabel(section_title)
 
-        layout = QVBoxLayout()
-        layout.addWidget(titleLabel)
+        layout = PlaceholderVBoxLayout()
+        layout.addWidget(PlaceholderTitleLabel)
 
         container = QFrame()
         container.setLayout(layout)
@@ -1231,11 +1226,11 @@ class Window(FluentWindow):
             self.flagsInterface.widget().vBoxLayout.addWidget(container)
 
     def addDropdown(self, labelText, items, description, section, internetRequired):
-        container = CardWidget(self)
+        container = PlaceholderCardWidget(self)
         container.setFixedHeight(73)
 
-        titleLabel = BodyLabel(labelText, container)
-        contentLabel = CaptionLabel(description, container)
+        PlaceholderTitleLabel = PlaceholderBodyLabel(labelText, container)
+        contentLabel = PlaceholderCaptionLabel(description, container)
         contentLabel.setTextColor("#606060", "#d2d2d2")
 
         comboBox = ComboBox(container)
@@ -1247,19 +1242,19 @@ class Window(FluentWindow):
 
         self.dropdown_widgets[labelText] = comboBox
 
-        hBoxLayout = QHBoxLayout(container)
+        hBoxLayout = PlaceholderHBoxLayout(container)
         hBoxLayout.setContentsMargins(18, 11, 11, 11)
         hBoxLayout.setSpacing(15)
 
-        vBoxLayout = QVBoxLayout()
+        vBoxLayout = PlaceholderVBoxLayout()
         vBoxLayout.setContentsMargins(0, 0, 0, 0)
         vBoxLayout.setSpacing(0)
-        vBoxLayout.addWidget(titleLabel, 0, Qt.AlignVCenter)
-        vBoxLayout.addWidget(contentLabel, 0, Qt.AlignVCenter)
+        vBoxLayout.addWidget(PlaceholderTitleLabel, 0, Placeholder.AlignVCenter)
+        vBoxLayout.addWidget(contentLabel, 0, Placeholder.AlignVCenter)
 
         hBoxLayout.addLayout(vBoxLayout)
         hBoxLayout.addStretch(1)
-        hBoxLayout.addWidget(comboBox, 0, Qt.AlignRight)
+        hBoxLayout.addWidget(comboBox, 0, Placeholder.AlignRight)
 
         if section.lower() == "flags":
             self.flagsInterface.widget().vBoxLayout.addWidget(container)
@@ -1269,14 +1264,14 @@ class Window(FluentWindow):
             self.settingInterface.widget().vBoxLayout.addWidget(container)
 
     def addToggle(self, labelText, description, section, internetRequired):
-        container = CardWidget(self)
+        container = PlaceholderCardWidget(self)
         container.setFixedHeight(73)
 
-        titleLabel = BodyLabel(labelText, container)
-        contentLabel = CaptionLabel(description, container)
+        PlaceholderTitleLabel = PlaceholderBodyLabel(labelText, container)
+        contentLabel = PlaceholderCaptionLabel(description, container)
         contentLabel.setTextColor("#606060", "#d2d2d2")
 
-        toggleButton = SwitchButton(container)
+        toggleButton = PlaceholderSwitchButton(container)
         toggleButton.setChecked(False)
         toggleButton.setOnText("")
         toggleButton.setOffText("")
@@ -1286,19 +1281,19 @@ class Window(FluentWindow):
 
         self.toggle_widgets[labelText] = toggleButton
 
-        hBoxLayout = QHBoxLayout(container)
+        hBoxLayout = PlaceholderHBoxLayout(container)
         hBoxLayout.setContentsMargins(18, 11, 11, 11)
         hBoxLayout.setSpacing(15)
 
-        vBoxLayout = QVBoxLayout()
+        vBoxLayout = PlaceholderVBoxLayout()
         vBoxLayout.setContentsMargins(0, 0, 0, 0)
         vBoxLayout.setSpacing(0)
-        vBoxLayout.addWidget(titleLabel, 0, Qt.AlignVCenter)
-        vBoxLayout.addWidget(contentLabel, 0, Qt.AlignVCenter)
+        vBoxLayout.addWidget(PlaceholderTitleLabel, 0, Placeholder.AlignVCenter)
+        vBoxLayout.addWidget(contentLabel, 0, Placeholder.AlignVCenter)
 
         hBoxLayout.addLayout(vBoxLayout)
         hBoxLayout.addStretch(1)
-        hBoxLayout.addWidget(toggleButton, 0, Qt.AlignRight)
+        hBoxLayout.addWidget(toggleButton, 0, Placeholder.AlignRight)
 
         if section.lower() == "flags":
             self.flagsInterface.widget().vBoxLayout.addWidget(container)
@@ -1306,14 +1301,14 @@ class Window(FluentWindow):
             self.modsInterface.widget().vBoxLayout.addWidget(container)
 
     def addTypeOption(self, labelText, description, section, accept_type, internetRequired):
-        container = CardWidget(self)
+        container = PlaceholderCardWidget(self)
         container.setFixedHeight(73)
 
-        titleLabel = BodyLabel(labelText, container)
-        contentLabel = CaptionLabel(description, container)
+        PlaceholderTitleLabel = PlaceholderBodyLabel(labelText, container)
+        contentLabel = PlaceholderCaptionLabel(description, container)
         contentLabel.setTextColor("#606060", "#d2d2d2")
 
-        lineEdit = LineEdit(container)
+        lineEdit = PlaceholderLineEdit(container)
         lineEdit.setPlaceholderText("")
         lineEdit.setText("")
 
@@ -1325,19 +1320,19 @@ class Window(FluentWindow):
 
         self.type_widgets[labelText] = lineEdit
 
-        hBoxLayout = QHBoxLayout(container)
+        hBoxLayout = PlaceholderHBoxLayout(container)
         hBoxLayout.setContentsMargins(18, 11, 11, 11)
         hBoxLayout.setSpacing(15)
 
-        vBoxLayout = QVBoxLayout()
+        vBoxLayout = PlaceholderVBoxLayout()
         vBoxLayout.setContentsMargins(0, 0, 0, 0)
         vBoxLayout.setSpacing(0)
-        vBoxLayout.addWidget(titleLabel, 0, Qt.AlignVCenter)
-        vBoxLayout.addWidget(contentLabel, 0, Qt.AlignVCenter)
+        vBoxLayout.addWidget(PlaceholderTitleLabel, 0, Placeholder.AlignVCenter)
+        vBoxLayout.addWidget(contentLabel, 0, Placeholder.AlignVCenter)
 
         hBoxLayout.addLayout(vBoxLayout)
         hBoxLayout.addStretch(1)
-        hBoxLayout.addWidget(lineEdit, 0, Qt.AlignRight)
+        hBoxLayout.addWidget(lineEdit, 0, Placeholder.AlignRight)
 
         if section.lower() == "flags":
             self.flagsInterface.widget().vBoxLayout.addWidget(container)
@@ -1360,23 +1355,23 @@ class Window(FluentWindow):
                     self.applySettingsFromJson(settings)
 
             except json.JSONDecodeError:
-                InfoBar.error(
+                PlaceholderInfoBar.error(
                     title="Roblox Studio Manager",
                     content="Error while decoding settings file: JSONDecodeError",
-                    orient=Qt.Horizontal,
+                    orient=Placeholder.Horizontal,
                     isClosable=True,
-                    position=InfoBarPosition.TOP_RIGHT,
+                    position=PlaceholderInfoBarPosition.TOP_RIGHT,
                     duration=2000,
                     parent=self
                 )
                 print("\033[1;31mERROR:\033[0m Error loading settings from JSON file.")
             except Exception as exception:
-                InfoBar.error(
+                PlaceholderInfoBar.error(
                     title="Roblox Studio Manager",
                     content=f"Error while fetching settings file: {exception}",
-                    orient=Qt.Horizontal,
+                    orient=Placeholder.Horizontal,
                     isClosable=True,
-                    position=InfoBarPosition.TOP_RIGHT,
+                    position=PlaceholderInfoBarPosition.TOP_RIGHT,
                     duration=2000,
                     parent=self
                 )
@@ -1415,12 +1410,12 @@ class Window(FluentWindow):
         self.worker.start()
 
     def onSettingsApplied(self, settings):
-        InfoBar.success(
+        PlaceholderInfoBar.success(
             title="Roblox Studio Manager",
             content="Settings have been applied successfully.",
-            orient=Qt.Horizontal,
+            orient=Placeholder.Horizontal,
             isClosable=True,
-            position=InfoBarPosition.TOP_RIGHT,
+            position=PlaceholderInfoBarPosition.TOP_RIGHT,
             duration=2000,
             parent=self
         )
