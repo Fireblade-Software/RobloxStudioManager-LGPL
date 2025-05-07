@@ -1,12 +1,15 @@
-![Roblox Studio Manager](https://github.com/Firebladedoge229/RobloxStudioManager/blob/main/images/RobloxStudioManager.png?raw=true)
+![Roblox Studio Manager LGPL](https://github.com/Firebladedoge229/RobloxStudioManager/blob/main/images/RobloxStudioManager.png?raw=true)
 
-# Roblox Studio Manager
+# Roblox Studio Manager LGPL
 
-A fork of [Roblox Studio Patcher](https://github.com/Firebladedoge229/RobloxStudioPatcher) with additional UI features.
+> [!CAUTION]  
+> This is the LGPL version of Roblox Studio Manager, with core functionality removed. For a functional version in GPL format, please visit [here](https://github.com/Firebladedoge229/RobloxStudioManager).
+
+A fork of [Roblox Studio Manager](https://github.com/Firebladedoge229/RobloxStudioManager) in LGPL format.
 
 A simple, easy-to-use program that contains many useful tools for customizing and managing ROBLOX Studio—whether you're changing themes, editing plugins, or modifying advanced settings.
 
-![Showcase](https://github.com/Firebladedoge229/RobloxStudioManager/blob/main/images/RobloxStudioManagerScrsht.png?raw=true)
+![Showcase](https://github.com/Firebladedoge229/RobloxStudioManager-LGPL/blob/main/images/RobloxStudioManagerScrsht.png?raw=true)
 
 ## Frequently Asked Questions
 
@@ -35,14 +38,14 @@ A simple, easy-to-use program that contains many useful tools for customizing an
 
 ## Installation
 
-Simply run the executable found at the [Releases](https://github.com/Firebladedoge229/RobloxStudioManager/releases/latest/download/RobloxStudioManager.exe) page.
+Simply run the executable found at the [Releases](https://github.com/Firebladedoge229/RobloxStudioManager-LGPL/releases/latest/download/RobloxStudioManager.exe) page.
 
 A [Windows Defender SmartScreen](https://learn.microsoft.com/en-us/windows/security/operating-system-security/virus-and-threat-protection/microsoft-defender-smartscreen/) window may display, or your anti-virus might trigger. This is due to the application signing system of [PyInstaller](https://github.com/pyinstaller/pyinstaller) and [Nuitka](https://github.com/Nuitka/Nuitka).
 
-If you are suspicious, feel free to compile the [code](https://github.com/Firebladedoge229/RobloxStudioManager/archive/refs/heads/main.zip) yourself!
+If you are suspicious, feel free to compile the [code](https://github.com/Firebladedoge229/RobloxStudioManager-LGPL/archive/refs/heads/main.zip) yourself!
 
 > [!note]
-> The project has since [moved](https://github.com/Firebladedoge229/RobloxStudioManager/commit/6111a6f15e8637141cda28f73307f455f62447a3) from PyInstaller to Nuitka for compiling the application after version v2.4.1.
+> The project has since [moved](https://github.com/Firebladedoge229/RobloxStudioManager-LGPL/commit/6111a6f15e8637141cda28f73307f455f62447a3) from PyInstaller to Nuitka for compiling the application after version v2.4.1.
 
 > [!important]
 > When building, make sure to download [version 0.1.0](https://github.com/electron/rcedit/releases/tag/v0.1.0) of RCEdit, placing it in the main directory.
