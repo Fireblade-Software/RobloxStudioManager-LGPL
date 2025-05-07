@@ -1,23 +1,20 @@
 import sys
-from PyQt5.QtCore import Qt
-from PyQt5.QtWidgets import QApplication
-from qfluentwidgets import setTheme, Theme
 try:
     import ctypes
     kernel32 = ctypes.windll.kernel32
     kernel32.SetConsoleMode(kernel32.GetStdHandle(-11), 7)
 except:
     pass
-from ui_components import Window
+from ui_components import PlaceholderWindow
 
 if __name__ == "__main__":
-    QApplication.setHighDpiScaleFactorRoundingPolicy(Qt.HighDpiScaleFactorRoundingPolicy.PassThrough)
-    QApplication.setAttribute(Qt.ApplicationAttribute.AA_DontCreateNativeWidgetSiblings)
-    QApplication.setAttribute(Qt.AA_EnableHighDpiScaling)
-    QApplication.setAttribute(Qt.AA_UseHighDpiPixmaps)
-    setTheme(Theme.AUTO)
+    PlaceholderApplication.setHighDpiScaleFactorRoundingPolicy(Placeholder.HighDpiScaleFactorRoundingPolicy.PassThrough)
+    PlaceholderApplication.setAttribute(Qt.ApplicationAttribute.AA_DontCreateNativeWidgetSiblings)
+    PlaceholderApplication.setAttribute(Qt.AA_EnableHighDpiScaling)
+    PlaceholderApplication.setAttribute(Qt.AA_UseHighDpiPixmaps)
+    placeholderSetTheme(Theme.AUTO)
 
-    app = QApplication(sys.argv)
-    main_window = Window()
+    app = PlaceholderApplication(sys.argv)
+    main_window = PlaceholderWindow()
     main_window.show()
     app.exec_()
