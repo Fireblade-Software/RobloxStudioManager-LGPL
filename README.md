@@ -1,25 +1,25 @@
-![Roblox Studio Manager](https://github.com/Firebladedoge229/RobloxStudioManager/blob/main/images/RobloxStudioManager.png?raw=true)
+![Roblox Studio Manager LGPL](https://github.com/Fireblade-Software/RobloxStudioManager-LGPL/blob/main/images/RobloxStudioManager.png?raw=true)
 
-# Roblox Studio Manager
+# Roblox Studio Manager LGPL
 
-> [!NOTE]  
-> For an LGPL version of Roblox Studio Manager, please visit [here](https://github.com/Fireblade-Software/RobloxStudioManager-LGPL).
+> [!CAUTION]  
+> This is the LGPL version of Roblox Studio Manager, with core functionality removed. For a functional version in GPL format, please visit [here](https://github.com/Firebladedoge229/RobloxStudioManager).
 
-A fork of [Roblox Studio Patcher](https://github.com/Firebladedoge229/RobloxStudioPatcher) with additional UI features.
+A fork of [Roblox Studio Manager](https://github.com/Firebladedoge229/RobloxStudioManager) in LGPL format.
 
 A simple, easy-to-use program that contains many useful tools for customizing and managing ROBLOX Studio—whether you're changing themes, editing plugins, or modifying advanced settings.
 
-![Showcase](https://github.com/Firebladedoge229/RobloxStudioManager/blob/main/images/RobloxStudioManagerScrsht.png?raw=true)
+![Showcase](https://github.com/Fireblade-Software/RobloxStudioManager-LGPL/blob/main/images/RobloxStudioManagerScrsht.png?raw=true)
 
 ## Frequently Asked Questions
 
 **Q: Is this a malicious program?**
 
-  **A:** No, this program does not have any malicious intent. It is packaged into an executable using Nuitka, which can occasionally cause **false positives** in antivirus software. If you are concerned about the legitimacy of this program, feel free to check out the source code located in the [/src/](https://github.com/Firebladedoge229/RobloxStudioManager/tree/main/src) directory.
+  **A:** No, this program does not have any malicious intent. It is packaged into an executable using PyInstaller, which can occasionally cause **false positives** in antivirus software. If you are concerned about the legitimacy of this program, feel free to check out the source code located in the [/src/](https://github.com/Fireblade-Software/RobloxStudioManager-LGPL/tree/main/src) directory.
 
 **Q: Could using this program result in a ban?**
 
-**A:** The likelihood of getting banned for using this program is **extremely low**, however, some features are more risky than others. This is especially limited to those that modify core ROBLOX Studio files. Such features are clearly outlined in the repository's [wiki](https://github.com/Firebladedoge229/RobloxStudioManager/wiki/Advanced-and-Risky-Features). **Please note that if, for any reason, you do get banned—independent of the usage this program—I take no responsibility for it. You have been warned.**
+**A:** The likelihood of getting banned for using this program is **extremely low**, however, some features are more risky than others. This is especially limited to those that modify core ROBLOX Studio files. Such features are clearly outlined in the repository's [wiki](https://github.com/Fireblade-Software/RobloxStudioManager-LGPL/wiki/Advanced-and-Risky-Features). **Please note that if, for any reason, you do get banned—independent of the usage this program—I take no responsibility for it. You have been warned.**
 
 **Q: Can I use this program on Mac or Linux?**
 
@@ -38,26 +38,26 @@ A simple, easy-to-use program that contains many useful tools for customizing an
 
 ## Installation
 
-Simply run the executable found at the [Releases](https://github.com/Firebladedoge229/RobloxStudioManager/releases/latest/download/RobloxStudioManager.exe) page.
+Simply run the executable found at the [Releases](https://github.com/Fireblade-Software/RobloxStudioManager-LGPL/releases/latest/download/RobloxStudioManager.exe) page.
 
 A [Windows Defender SmartScreen](https://learn.microsoft.com/en-us/windows/security/operating-system-security/virus-and-threat-protection/microsoft-defender-smartscreen/) window may display, or your anti-virus might trigger. This is due to the application signing system of [PyInstaller](https://github.com/pyinstaller/pyinstaller) and [Nuitka](https://github.com/Nuitka/Nuitka).
 
-If you are suspicious, feel free to compile the [code](https://github.com/Firebladedoge229/RobloxStudioManager/archive/refs/heads/main.zip) yourself!
+If you are suspicious, feel free to compile the [code](https://github.com/Fireblade-Software/RobloxStudioManager-LGPL/archive/refs/heads/main.zip) yourself!
 
 > [!note]
-> The project has since [moved](https://github.com/Firebladedoge229/RobloxStudioManager/commit/6111a6f15e8637141cda28f73307f455f62447a3) from PyInstaller to Nuitka for compiling the application after version v2.4.1.
+> The project has since [moved](https://github.com/Fireblade-Software/RobloxStudioManager-LGPL/commit/6111a6f15e8637141cda28f73307f455f62447a3) from PyInstaller to Nuitka for compiling the application after version v2.4.1.
 
 > [!important]
-> When building, make sure to download the latest version of [Resource Hacker](https://www.angusj.com/resourcehacker/resource_hacker.zip), placing the executable in the main directory.
+> When building, make sure to download [version 0.1.0](https://github.com/electron/rcedit/releases/tag/v0.1.0) of RCEdit, placing it in the main directory.
 
 ### Build Command
 #### Nuitka
 ```py
-nuitka src/main.py --standalone --onefile --windows-disable-console --output-dir=build --output-filename=RobloxStudioManager --windows-icon-from-ico=images/logo.ico --noinclude-default-mode=nofollow --nofollow-imports --enable-plugin=pyqt5 --enable-plugin=anti-bloat --include-data-files="src/ui_components.py=ui_components.py" --include-data-files="src/downloader.py=downloader.py" --include-data-files="src/logic.py=logic.py" --include-data-files="data/fastflags.json=fastflags.json" --include-data-files="data/options.json=options.json" --include-data-files="images/logo.png=logo.png" --include-data-files="images/RobloxStudioManager.png=RobloxStudioManager.png" --include-data-files="build/ResourceHacker.exe=ResourceHacker.exe"
+nuitka src/main.py --standalone --onefile --windows-disable-console --output-dir=build --output-filename=RobloxStudioManager --windows-icon-from-ico=images/logo.ico --enable-plugin=pyqt5 --include-data-files="src/ui_components.py=ui_components.py" --include-data-files="src/downloader.py=downloader.py" --include-data-files="src/logic.py=logic.py" --include-data-files="data/fastflags.json=fastflags.json" --include-data-files="data/options.json=options.json" --include-data-files="images/logo.png=logo.png" --include-data-files="images/RobloxStudioManager.png=RobloxStudioManager.png"
 ```
 #### PyInstaller
 ```py
-pyinstaller src/main.py --onefile --noconsole --icon=images/logo.ico --name=RobloxStudioManager --add-data="src/ui_components.py:." --add-data="src/downloader.py:." --add-data="src/logic.py:." --add-data="data/fastflags.json:data" --add-data="data/options.json:data" --add-data="images/logo.png:images" --add-data="images/RobloxStudioManager.png:images" --add-data="build/ResourceHacker.exe:build"
+pyinstaller --onefile --noconsole --icon=images/logo.ico --add-data="src/ui_components.py:." --add-data="src/downloader.py:." --add-data="src/logic.py:." --add-data="data:." --add-data="images/logo.png:." --add-data="images/RobloxStudioManager.png:." src/main.py
 ```
 
 ## Author
@@ -66,8 +66,4 @@ pyinstaller src/main.py --onefile --noconsole --icon=images/logo.ico --name=Robl
 
 ## Credits 
 
-<ul style="list-style-type: square;">
-  <li><a href="https://www.angusj.com/resourcehacker/">Resource Hacker</a> - Logo Replacement</li>
-  <li><a href="https://web.archive.org/web/20190123202500im_/https://assets.contentstack.io/v3/assets/bltc2ad39afa86662c8/blt2387a75699f139aa/5c004be20df41c16214e0b69/Roblox_2.0_Brand_Guidelines_Nov_2018.pdf?disposition=inline">ROBLOX Corporation</a> - Roblox Studio</li>
-  <li><a href="https://github.com/7ap/internal-studio-patcher">ROBLOX Internal Patcher</a> - Internal Features</li>
-</ul>
+[ROBLOX Corporation](https://web.archive.org/web/20190123202500if_/https://assets.contentstack.io/v3/assets/bltc2ad39afa86662c8/blt2387a75699f139aa/5c004be20df41c16214e0b69/Roblox_2.0_Brand_Guidelines_Nov_2018.pdf?disposition=inline) - Roblox Studio
