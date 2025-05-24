@@ -35,11 +35,6 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r requirements.txt
 
-      - name: Modify FluentWidgets
-        run: |
-          $QFLUENT_PATH = python -c "import sys; sys.stdout = open('nul', 'w'); import qfluentwidgets; sys.stdout = sys.__stdout__;  print(qfluentwidgets.__path__[0])"
-          Invoke-WebRequest -Uri "https://raw.githubusercontent.com/Firebladedoge229/PyQt-Fluent-Widgets/refs/heads/master/qfluentwidgets/common/config.py" -OutFile "$QFLUENT_PATH/common/config.py"
-
       - name: Install Nuitka
         run: |
           pip install nuitka
@@ -70,7 +65,6 @@ jobs:
             --nofollow-imports `
             --enable-plugin=pyqt5 `
             --enable-plugin=anti-bloat `
-            --include-data-files="src/ui_components.py=ui_components.py" `
             --include-data-files="src/downloader.py=downloader.py" `
             --include-data-files="src/logic.py=logic.py" `
             --include-data-files="data/fastflags.json=fastflags.json" `
@@ -91,7 +85,6 @@ jobs:
             --nofollow-imports `
             --enable-plugin=pyqt5 `
             --enable-plugin=anti-bloat `
-            --include-data-files="src/ui_components.py=ui_components.py" `
             --include-data-files="src/downloader.py=downloader.py" `
             --include-data-files="src/logic.py=logic.py" `
             --include-data-files="data/fastflags.json=fastflags.json" `
@@ -144,11 +137,6 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r requirements.txt
           pip install pyinstaller
-
-      - name: Modify FluentWidgets
-        run: |
-          QFLUENT_PATH=$(python -c "import sys; sys.stdout = open('nul', 'w'); import qfluentwidgets; sys.stdout = sys.__stdout__;  print(qfluentwidgets.__path__[0])")
-          curl -o "$QFLUENT_PATH/common/config.py" "https://raw.githubusercontent.com/Firebladedoge229/PyQt-Fluent-Widgets/refs/heads/master/qfluentwidgets/common/config.py"
        
       - name: Build RobloxStudioManager [macOS]
         run: |
@@ -164,7 +152,6 @@ jobs:
             --exclude-module=test \
             --exclude-module=asyncio \
             --exclude-module=PyQt5.QtWebEngineWidgets \
-            --add-data "src/ui_components.py:." \
             --add-data "src/downloader.py:." \
             --add-data "src/logic.py:." \
             --add-data "data/fastflags.json:." \
