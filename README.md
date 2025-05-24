@@ -5,7 +5,7 @@
 > [!CAUTION]  
 > This is the LGPL version of Roblox Studio Manager, with core functionality removed. For a functional version in GPL format, please visit [here](https://github.com/Firebladedoge229/RobloxStudioManager).
 
-A fork of [Roblox Studio Manager](https://github.com/Firebladedoge229/RobloxStudioManager) in LGPL format.
+A fork of [Roblox Studio Manager](https://github.com/Firebladedoge229/RobloxStudioManager) in MIT format.
 
 A simple, easy-to-use program that contains many useful tools for customizing and managing ROBLOX Studio—whether you're changing themes, editing plugins, or modifying advanced settings.
 
