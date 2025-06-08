@@ -1,6 +1,6 @@
-![Roblox Studio Manager LGPL](https://github.com/Fireblade-Software/RobloxStudioManager-LGPL/blob/main/images/RobloxStudioManager.png?raw=true)
+![Roblox Studio Manager MIT](https://github.com/Fireblade-Software/RobloxStudioManager-MIT/blob/main/images/RobloxStudioManager.png?raw=true)
 
-# Roblox Studio Manager LGPL
+# Roblox Studio Manager MIT
 
 > [!CAUTION]  
 > This is the MIT version of Roblox Studio Manager, with core functionality removed. For a functional version in GPL format, please visit [here](https://github.com/Firebladedoge229/RobloxStudioManager).
@@ -9,17 +9,17 @@ A fork of [Roblox Studio Manager](https://github.com/Firebladedoge229/RobloxStud
 
 A simple, easy-to-use program that contains many useful tools for customizing and managing ROBLOX Studio—whether you're changing themes, editing plugins, or modifying advanced settings.
 
-![Showcase](https://github.com/Fireblade-Software/RobloxStudioManager-LGPL/blob/main/images/RobloxStudioManagerScrsht.png?raw=true)
+![Showcase](https://github.com/Fireblade-Software/RobloxStudioManager-MIT/blob/main/images/RobloxStudioManagerScrsht.png?raw=true)
 
 ## Frequently Asked Questions
 
 **Q: Is this a malicious program?**
 
-  **A:** No, this program does not have any malicious intent. It is packaged into an executable using PyInstaller, which can occasionally cause **false positives** in antivirus software. If you are concerned about the legitimacy of this program, feel free to check out the source code located in the [/src/](https://github.com/Fireblade-Software/RobloxStudioManager-LGPL/tree/main/src) directory.
+  **A:** No, this program does not have any malicious intent. It is packaged into an executable using PyInstaller, which can occasionally cause **false positives** in antivirus software. If you are concerned about the legitimacy of this program, feel free to check out the source code located in the [/src/](https://github.com/Fireblade-Software/RobloxStudioManager-MIT/tree/main/src) directory.
 
 **Q: Could using this program result in a ban?**
 
-**A:** The likelihood of getting banned for using this program is **extremely low**, however, some features are more risky than others. This is especially limited to those that modify core ROBLOX Studio files. Such features are clearly outlined in the repository's [wiki](https://github.com/Fireblade-Software/RobloxStudioManager-LGPL/wiki/Advanced-and-Risky-Features). **Please note that if, for any reason, you do get banned—independent of the usage this program—I take no responsibility for it. You have been warned.**
+**A:** The likelihood of getting banned for using this program is **extremely low**, however, some features are more risky than others. This is especially limited to those that modify core ROBLOX Studio files. Such features are clearly outlined in the repository's [wiki](https://github.com/Fireblade-Software/RobloxStudioManager-MIT/wiki/Advanced-and-Risky-Features). **Please note that if, for any reason, you do get banned—independent of the usage this program—I take no responsibility for it. You have been warned.**
 
 **Q: Can I use this program on Mac or Linux?**
 
@@ -38,14 +38,14 @@ A simple, easy-to-use program that contains many useful tools for customizing an
 
 ## Installation
 
-Simply run the executable found at the [Releases](https://github.com/Fireblade-Software/RobloxStudioManager-LGPL/releases/latest/download/RobloxStudioManager.exe) page.
+Simply run the executable found at the [Releases](https://github.com/Fireblade-Software/RobloxStudioManager-MIT/releases/latest/download/RobloxStudioManager.exe) page.
 
 A [Windows Defender SmartScreen](https://learn.microsoft.com/en-us/windows/security/operating-system-security/virus-and-threat-protection/microsoft-defender-smartscreen/) window may display, or your anti-virus might trigger. This is due to the application signing system of [PyInstaller](https://github.com/pyinstaller/pyinstaller) and [Nuitka](https://github.com/Nuitka/Nuitka).
 
-If you are suspicious, feel free to compile the [code](https://github.com/Fireblade-Software/RobloxStudioManager-LGPL/archive/refs/heads/main.zip) yourself!
+If you are suspicious, feel free to compile the [code](https://github.com/Fireblade-Software/RobloxStudioManager-MIT/archive/refs/heads/main.zip) yourself!
 
 > [!note]
-> The project has since [moved](https://github.com/Fireblade-Software/RobloxStudioManager-LGPL/commit/6111a6f15e8637141cda28f73307f455f62447a3) from PyInstaller to Nuitka for compiling the application after version v2.4.1.
+> The project has since [moved](https://github.com/Fireblade-Software/RobloxStudioManager-MIT/commit/6111a6f15e8637141cda28f73307f455f62447a3) from PyInstaller to Nuitka for compiling the application after version v2.4.1.
 
 > [!important]
 > When building, make sure to download [version 0.1.0](https://github.com/electron/rcedit/releases/tag/v0.1.0) of RCEdit, placing it in the main directory.
